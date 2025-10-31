@@ -1,14 +1,19 @@
 import express from "express";
-import bootstrap from "./src/app.controller.js";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import profileRoutes from "./src/Routes/profile.routes.js";
+import authRoutes from "./src/Routes/auth.routes.js";
 
+dotenv.config();
 
-const PORT = 3000 || process.env.PORT;
 const app = express();
-const host = "localhost" ;
 
+app.use(express.json());
+app.use(cookieParser());
 
-await bootstrap(app, express);
+// ✅ كل الـ Routes تبقى تحت /api
+app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server listening at http://${host}:${PORT}`);
-});
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
