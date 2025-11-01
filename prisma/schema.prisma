@@ -46,17 +46,26 @@ model User {
   emailVerified Boolean      @default(false)
   createdAt     DateTime     @default(now())
 
+  // === Company Fields (only if role = COMPANY) ===
+  companyName     String?
+  industry        String?
+  website         String?
+  logoUrl         String?
+  description     String?
+  location        String?
+  establishedAt   DateTime?
+
   // Relations
-  profile        Profile?        // one-to-one
+  profile        Profile?        
   jobs           Job[]           @relation("CompanyJobs")
-  applications   Application[]   // one-to-many
+  applications   Application[]   
 }
 
 // === Profile (applicant CV) ===
 model Profile {
   id               Int       @id @default(autoincrement())
   user             User      @relation(fields: [userId], references: [id])
-  userId           Int       @unique   // واحد لكل User
+  userId           Int       @unique
   title            String?   
   bio              String?   
   education        String?   

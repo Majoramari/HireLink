@@ -2,24 +2,20 @@
 import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
-    try {
-        // قراءة التوكن من الكوكي
-        const token = req.cookies?.token; // لازم تكون مثبت cookie-parser
-        if (!token) {
-            return res.status(401).json({ message: "Unauthorized: No token provided" });
-        }
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) return res.status(401).json({ message: "Unauthorized: No token provided" });
 
-        // التحقق من التوكن
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        // حفظ بيانات المستخدم في req.user
-        req.user = decoded;
+  const token = authHeader.split(" ")[1]; // Bearer <token>
+  if (!token) return res.status(401).json({ message: "Unauthorized: Token missing" });
 
-        next(); // السماح للـ route بالاستمرار
-    } catch (error) {
-        console.error("Token verification failed:", error.message);
-        return res.status(401).json({ message: "Unauthorized: Invalid token" });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // id, email, role
+    next();
+  } catch (err) {
+    console.error("Token verification error:", err);
+    res.status(403).json({ message: "Forbidden: Invalid token" });
+  }
 };
 
 export default verifyToken;
