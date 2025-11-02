@@ -1,14 +1,26 @@
 import express from "express";
-import bootstrap from "./src/app.controller.js";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import "express-async-errors";
+import bootsrap from "./src/app.controller.js"
 
+// ✅ Load environment variables first
+dotenv.config();
 
-const PORT = 3000 || process.env.PORT;
+// ✅ Create app instance
 const app = express();
-const host = "localhost" ;
 
+// ✅ Middlewares
+app.use(express.json());
 
-await bootstrap(app, express);
+// ✅ Cookie parser
+app.use(cookieParser());
 
-app.listen(PORT, () => {
-    console.log(`Server listening at http://${host}:${PORT}`);
-});
+// ✅ Routes
+await bootsrap(app , express);
+
+// ✅ Port
+const PORT = process.env.PORT || 5200;
+
+// ✅ Start server
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

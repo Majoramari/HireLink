@@ -1,31 +1,31 @@
 // database/client.js
-import dotenv from "dotenv";
-dotenv.config(); // لازم يكون فوق أي import لل PrismaClient
+// import dotenv from "dotenv";
+// dotenv.config();
 
+import { PrismaClient } from "../src/generated/prisma/client.js";
 //import { PrismaClient } from "@prisma/client";
-
-import { PrismaClient } from "../src/generated/prisma/client.js"; // أو default.js حسب الملف اللي اتولد
 
 const prisma = new PrismaClient();
 
-
-
-//database connection -> for clean code
+// connect to DB
 export const connectDB = async () => {
   try {
     await prisma.$connect();
     console.log("✅ Database connected successfully!");
   } catch (error) {
-    console.error("❌ Database connection failed:", error.message);
+    console.error("❌ Database connection failed:", error);
     process.exit(1);
   }
 };
 
-//disconnect function -> for clean code
+// disconnect from DB
 export const disconnectDB = async () => {
-  await prisma.$disconnect();
-  console.log("🛑 Database connection closed.");
-
+  try {
+    await prisma.$disconnect();
+    console.log("🛑 Database connection closed.");
+  } catch (error) {
+    console.error("❌ Error closing database connection:", error);
+  }
 };
 
 export default prisma;
