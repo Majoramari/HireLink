@@ -1,5 +1,5 @@
 import { successResponse } from "../Utils/successResponse.utils.js";
-import { getAllJobsService , createJobService } from "../Services/jobs.services.js";
+import { getAllJobsService , createJobService, getJobByIdService, updateJobByIdService, deleteJobService } from "../Services/jobs.services.js";
 import STATUS_CODES from "../Utils/Constants/statuscode.js";
 import { JOBS_MESSAGES , COMMON_MESSAGES} from "../Utils/Constants/messages.js"
 import { jobSchemaValidation } from "../Validation/jobs.validation.js";
@@ -20,16 +20,47 @@ export const createJob = async (req, res, next) => {
     successResponse({ res, statusCode: STATUS_CODES.CREATED, message: COMMON_MESSAGES.CREATED_SUCCESS, data: job });
 };
 
-//update job
-export const updateJob = async (req, res, next) => {};
+                                    /**************************************************************************/
+//update job => allowed for company only
+export const updateJobById = async (req, res, next) => {
+  
+    
+    const job = await updateJobByIdService(req.params.id, req.user.id, req.body);
+  
+    if (!job) throw new Error(JOBS_MESSAGES.NOT_FOUND, STATUS_CODES.NOT_FOUND);
+  
+    successResponse({ res, statusCode: STATUS_CODES.OK, message:JOBS_MESSAGES.UPDATE_SUCCESS , data: job });
 
-//delete job
-export const deleteJob = async (req, res, next) => {};
+};
 
-//get job by id
-export const getJobById = async (req, res, next) => {};
+                                    /**************************************************************************/
+// DELETE job
+export const deleteJob = async (req, res, next) => {
+  
+    await deleteJobService(req.params.id, req.user.id);
+    
+    successResponse({ res, statusCode: STATUS_CODES.OK, message:JOBS_MESSAGES.DELETE_SUCCESS });
+
+};
 
 
+                                      /************************************************************************/    
+// GET job by ID
+export const getJobById = async (req, res, next) => {
+  
+   
+    const job = await getJobByIdService(req.params.id);
+  
+    if (!job) throw new Error(JOBS_MESSAGES.NOT_FOUND, STATUS_CODES.NOT_FOUND);
+  
+  
+    successResponse({ res, statusCode: STATUS_CODES.OK, message:JOBS_MESSAGES.FETCH_SUCCESS , data: job });
+  
+
+};
+
+
+                                     /***********************************************************************/
 //GET all jobs
 export const getAllJobs = async (req, res, next) => {
 

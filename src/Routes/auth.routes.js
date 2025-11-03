@@ -15,7 +15,6 @@ router.post("/login", validateBody(loginSchema), login);
 //user logout 
 router.post("/logout", verifyToken ,logout);
 
-
 // GET /auth/me - معلومات المستخدم الحالي 
 router.get("/me", verifyToken, getCurrentUser);
 
