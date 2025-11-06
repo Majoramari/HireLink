@@ -131,7 +131,7 @@ model Job {
   title           String
   description     String
   location        String?       
-  salaryRange     String?       
+  salaryRange     Int?       
   isRemote        Boolean?      
   category        String?       
   experienceLevel String?       

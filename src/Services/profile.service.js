@@ -22,7 +22,7 @@ export const getProfileByUserId = async (userId) => {
   });
 
   if (!profile) throw new ServiceError("Profile not found", 404);
-
+  
   return profile;
 };
 

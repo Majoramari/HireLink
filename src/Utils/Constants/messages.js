@@ -28,7 +28,18 @@ export const COMPANY_MESSAGES = {
   
 };
 
+export const JOBS_MESSAGES = {
+  CREATED_OR_UPDATED: "Job created or updated successfully",
+  FETCH_SUCCESS: "Job details fetched successfully",
+  NOT_FOUND: "Job not found",
+  DELETE_SUCCESS: "Job deleted successfully",
+  ALL_FETCH_SUCCESS: "All jobs fetched successfully",
+  ONLY_COMPANY_CAN_CREATE_JOB: "Only COMPANY users can create job",
+};
+
 export const COMMON_MESSAGES = {
+
+  CREATED_SUCCESS: "Created successfully",
   UNAUTHORIZED: "Unauthorized access 🚫",
   FORBIDDEN: "You do not have permission to perform this action",
   SERVER_ERROR: "Internal server error 😢",

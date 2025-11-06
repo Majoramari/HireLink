@@ -5,7 +5,7 @@
 import { PrismaClient } from "../src/generated/prisma/client.js";
 //import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 // connect to DB
 export const connectDB = async () => {

@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start:dev": "node --watch .",
-    "dev": "nodemon .",
+    
+    "dev": "nodemon server.js",
     "prisma": "npx prisma"
   },
   "repository": {
