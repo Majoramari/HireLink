@@ -9,6 +9,6 @@ export const jobSchemaValidation = Joi.object({
   isRemote: Joi.boolean().optional(),
   category: Joi.string().optional(),
   experienceLevel: Joi.string().optional(),
-  companyId: Joi.number().required(),
+  companyId: Joi.forbidden(),
 });
 

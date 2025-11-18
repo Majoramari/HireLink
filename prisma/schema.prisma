@@ -59,6 +59,8 @@ model User {
   profile        Profile?        
   jobs           Job[]           @relation("CompanyJobs")
   applications   Application[]   
+  notifications Notification[]
+
 }
 
 // === Profile (applicant CV) ===
@@ -149,7 +151,8 @@ model Application {
   jobId        Int
   applicant    User             @relation(fields: [applicantId], references: [id])
   applicantId  Int
-  coverLetter  String?          
+  coverLetter  String?    
+  cvUrl         String?       
   status       ApplicationStatus @default(PENDING)
   interviewDate DateTime?       
   createdAt    DateTime         @default(now())
@@ -165,3 +168,14 @@ model AdminStats {
   totalApplications Int
   updatedAt         DateTime @updatedAt
 }
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
