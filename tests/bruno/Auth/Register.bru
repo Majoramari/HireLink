@@ -1,0 +1,28 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "guru-sleeve-dipper@duck.com",
+    "password": "a@A345dsa",
+    "role": "TALENT",
+    "profileData": {
+      "firstName": "sleeve",
+      "lastName": "dipper"
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

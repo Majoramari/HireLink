@@ -1,41 +1,49 @@
 {
-  "name": "hirelink-backend",
-  "version": "1.0.0",
-  "description": "Coming soon...",
-  "main": "server.js",
-  "type": "module",
-  "scripts": {
-    "dev": "nodemon server.js",
-    "prisma": "npx prisma"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/linanagm/HireLink-Backend.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/linanagm/HireLink-Backend/issues"
-  },
-  "homepage": "https://github.com/linanagm/HireLink-Backend#readme",
-  "dependencies": {
-    "@prisma/client": "^6.18.0",
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.2",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^4.21.2",
-    "express-async-errors": "^3.1.1",
-    "joi": "^18.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.1",
-    "multer": "^2.0.2",
-    "pg": "^8.16.3"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10",
-    "prisma": "^6.18.0"
-  }
+	"name": "hirelink-backend",
+	"version": "0.0.1",
+	"type": "module",
+	"description": "WIP",
+	"main": "src/server.js",
+	"scripts": {
+		"dev": "node --env-file=.env --watch src/server.js",
+		"start": "node src/server.js",
+		"start:env": "node --env-file=.env.production src/server.js",
+		"test": "vitest",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"prisma": "prisma",
+		"prisma:generate": "prisma generate",
+		"prisma:migrate": "prisma migrate",
+		"prisma:studio": "prisma studio"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.7",
+		"pino-pretty": "^13.1.2",
+		"prisma": "6.16.1",
+		"supertest": "^7.1.4",
+		"vitest": "^4.0.14"
+	},
+	"dependencies": {
+		"@prisma/client": "6.16.1",
+		"bcrypt": "^6.0.0",
+		"chalk": "^5.6.2",
+		"compression": "^1.8.1",
+		"connect-timeout": "^1.9.1",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.5",
+		"ejs": "^3.1.10",
+		"express": "^5.1.0",
+		"express-rate-limit": "^8.2.1",
+		"helmet": "^8.1.0",
+		"hpp": "^0.2.3",
+		"jsonwebtoken": "^9.0.2",
+		"morgan": "^1.10.1",
+		"nodemailer": "^7.0.11",
+		"pino": "^10.1.0",
+		"ulid": "^3.0.1",
+		"zod": "^4.1.13"
+	}
 }

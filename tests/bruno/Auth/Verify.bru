@@ -1,0 +1,22 @@
+meta {
+  name: Verify
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/auth/verify
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "verificationToken": "9317a665e8c8ec639a757b753776d9699397e97338478d90d37e79ba4c605d89"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

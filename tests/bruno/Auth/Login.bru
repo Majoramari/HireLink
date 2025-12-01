@@ -1,0 +1,30 @@
+meta {
+  name: Login
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "guru-sleeve-dipper@duck.com",
+    "password": "a@A345dsa"
+  }
+}
+
+script:post-response {
+  const token = res.body.data.token;
+  
+  bru.setEnvVar("access_token", token);
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
