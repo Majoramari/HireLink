@@ -106,7 +106,9 @@ export async function updateFile(type, id, file) {
 
 		// Delete old avatar/resume if exists
 		if (fileId) {
-			await cloudinary.uploader.destroy(fileId);
+			await cloudinary.uploader.destroy(fileId, {
+				resource_type: type === "avatar" ? "image" : "raw",
+			});
 		}
 
 		const updated = await prisma.user.update({
@@ -228,7 +230,11 @@ export async function deleteFile(type, id) {
 			});
 		}
 
-		const [error, _] = await errorUtils(cloudinary.api.resource(fileId));
+		const [error, _] = await errorUtils(
+			cloudinary.api.resource(fileId, {
+				resource_type: type === "avatar" ? "image" : "raw",
+			}),
+		);
 
 		if (error) {
 			return result({
@@ -239,7 +245,9 @@ export async function deleteFile(type, id) {
 		}
 
 		if (fileId) {
-			await cloudinary.uploader.destroy(fileId);
+			await cloudinary.uploader.destroy(fileId, {
+				resource_type: type === "avatar" ? "image" : "raw",
+			});
 		}
 
 		return result({
