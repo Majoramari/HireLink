@@ -23,6 +23,7 @@ router.put(
 );
 router.get("/avatar", requireAuth, talentController.getFile);
 router.delete("/avatar", requireAuth, talentController.deleteFile);
+
 router.get("/resume", requireAuth, talentController.getFile);
 router.put(
 	"/resume",
@@ -30,4 +31,8 @@ router.put(
 	uploadResume.single("resume"),
 	talentController.updateFile,
 );
+router.delete("/resume", requireAuth, talentController.deleteFile);
+
+// TODO: GET /talent/recommendations/jobs?limit=10
+
 export default router;

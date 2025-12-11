@@ -44,20 +44,16 @@ export async function createProfile({ email, password, profileData }) {
 		return result({
 			ok: false,
 			statusCode: statusCodes.CONFLICT,
-			message: "user with this email already exists",
+			message: "talent with this email already exists",
 		});
 	}
 
 	return result({
 		ok: true,
 		statusCode: statusCodes.CREATED,
-		message: "user created",
+		message: "talent created",
 		payload: user,
 	});
-}
-
-export async function findByEmail(email) {
-	return prisma.user.findUnique({ where: { email } });
 }
 
 export async function updateProfile(id, profileData) {
@@ -79,17 +75,18 @@ export async function updateProfile(id, profileData) {
 		return result({
 			ok: false,
 			statusCode: statusCodes.NOT_FOUND,
-			message: "user not found",
+			message: "talent not found",
 		});
 	}
 
 	return result({
 		ok: true,
 		statusCode: statusCodes.OK,
-		message: "user updated",
+		message: "talent updated",
 		payload: user,
 	});
 }
+
 export async function updateFile(type, id, file) {
 	try {
 		const user = await prisma.user.findUnique({
@@ -141,6 +138,60 @@ export async function updateFile(type, id, file) {
 	}
 }
 
+export async function deleteFile(type, id) {
+	try {
+		const user = await prisma.user.findUnique({
+			where: { id },
+			include: { talentProfile: true },
+		});
+
+		if (!user) {
+			return result({
+				ok: false,
+				statusCode: statusCodes.NOT_FOUND,
+				message: "talent not found",
+			});
+		}
+
+		const fileId = user.talentProfile[`${type}PublicId`];
+
+		if (!fileId) {
+			return result({
+				ok: false,
+				statusCode: statusCodes.NOT_FOUND,
+				message: `talent ${type} not found`,
+			});
+		}
+
+		const [error, _] = await errorUtils(cloudinary.api.resource(fileId));
+
+		if (error) {
+			return result({
+				ok: false,
+				statusCode: statusCodes.NOT_FOUND,
+				message: `talent ${type} not found`,
+			});
+		}
+
+		if (fileId) {
+			await cloudinary.uploader.destroy(fileId);
+		}
+
+		return result({
+			ok: true,
+			statusCode: statusCodes.OK,
+			message: `talent ${type} deleted`,
+		});
+	} catch (err) {
+		logger.error(err);
+
+		return result({
+			ok: false,
+			statusCode: statusCodes.INTERNAL_SERVER_ERROR,
+			message: `error deleting ${type}`,
+		});
+	}
+}
 
 export async function getFile(type, id, { width = 200, height = 200 }) {
 	try {

@@ -68,3 +68,26 @@ export async function getFile(req, res) {
 	});
 }
 
+export async function deleteFile(req, res) {
+    const type = req.url.includes("avatar") ? "avatar" : "resume";
+	const result = await talentService.deleteFile(
+        type,
+		req.user.id,
+	);
+
+	if (!result.ok) {
+		return fail({
+			res,
+			statusCode: result.statusCode,
+			message: result.message,
+			details: result.payload,
+		});
+	}
+
+	return success({
+		res,
+		statusCode: result.statusCode,
+		message: result.message,
+		data: result.payload,
+	});
+}
