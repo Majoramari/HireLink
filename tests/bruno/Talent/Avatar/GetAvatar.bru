@@ -1,0 +1,41 @@
+meta {
+  name: GetAvatar
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/talent/avatar?width=200&height=200
+  body: none
+  auth: inherit
+}
+
+params:query {
+  width: 200
+  height: 200
+}
+
+headers {
+  Authorization: Bearer {{access_token}}
+}
+
+body:json {
+  {
+    "headline": "a headline for testing",
+    "bio": "I love coding",
+    "location": "Planet earth"
+  }
+}
+
+body:multipart-form {
+  avatar: @file(/home/majoramari/Downloads/1.png)
+}
+
+body:file {
+  file: @file(/home/majoramari/Downloads/1.png) @contentType(image/png)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
