@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { talentProfileSchema } from "./talent.validator.js";
 
 // Base validation schemas
 const emailSchema = z.email({
@@ -20,26 +21,6 @@ const passwordSchema = z
 const roleSchema = z.enum(["TALENT", "EMPLOYER"], {
 	errorMap: () => ({ message: "role must be either TALENT or EMPLOYER" }),
 });
-
-// Talent profile schema
-const talentProfileSchema = z
-	.object({
-		firstName: z
-			.string({ required_error: "firstName is required" })
-			.min(2, { message: "firstName must be at least 2 characters" }),
-		lastName: z
-			.string({ required_error: "lastName is required" })
-			.min(2, { message: "lastName must be at least 2 characters" }),
-		headline: z.string().optional(),
-		bio: z
-			.string()
-			.max(1000, { message: "bio must be at most 1000 characters" })
-			.optional(),
-		location: z.string().optional(),
-		avatarUrl: z.url({ message: "invalid avatar URL" }).optional(),
-		resumeUrl: z.url({ message: "invalid resume URL" }).optional(),
-	})
-	.strict();
 
 // Employer profile schema
 const employerProfileSchema = z
@@ -125,7 +106,6 @@ export const resetPasswordSchema = z.object({
 	newPassword: z
 		.string()
 		.min(8, "password must be at least 8 characters")
-		.max(128, "password is too long")
 		.min(8, { message: "must be at least 8 characters" })
 		.max(32, { message: "must be at most 32 characters" })
 		.regex(/[A-Z]/, { message: "must include uppercase letters" })
