@@ -16,51 +16,40 @@ import {
 } from "./index.js";
 
 export async function register({ email, password, role, profileData }) {
-	const exists = await userService.findUser(email);
-
-	if (exists) {
-		return result({
-			ok: false,
-			statusCode: statusCodes.CONFLICT,
-			message: "user with this email already exists",
-		});
-	}
-
 	const hashed = await bcrypt.hash(password, 10);
 	const profileOptions = { email, password: hashed, profileData };
 
-	let user;
+	let result;
 	switch (role) {
 		case "TALENT":
-			user = await talentService.createProfile(profileOptions);
+			result = await talentService.createProfile(profileOptions);
 			break;
 		case "EMPLOYER":
-			user = await employerService.createProfile(profileOptions);
+			result = await employerService.createProfile(profileOptions);
 			break;
 		default:
 			throw new ApiError(statusCodes.BAD_REQUEST, "Invalid role");
 	}
 
-	const verificationUrl = `${env.FRONTEND_URL}/verify?vt=${user.verificationToken}`;
+	if (!result.ok) {
+		return result;
+	}
+
+	const verificationUrl = `${env.FRONTEND_URL}/verify?vt=${result.payload.verificationToken}`;
 
 	emailService
-		.sendVerificationEmail(user.email, verificationUrl, {
+		.sendVerificationEmail(result.payload.email, verificationUrl, {
 			expiryMinutes: 5,
 		})
 		.catch((err) => {
 			logger.error(err);
 		});
 
-	delete user.password; // remove password, for security (this object will return to the controller)
-	delete user.verificationToken;
-	delete user.verificationExpiresAt;
+	delete result.payload.password; // remove password, for security (this object will return to the controller)
+	delete result.payload.verificationToken;
+	delete result.payload.verificationExpiresAt;
 
-	return result({
-		ok: true,
-		statusCode: statusCodes.CREATED,
-		message: "user registered",
-		payload: user,
-	});
+	return result;
 }
 
 export async function verifyEmail({ verificationToken }) {
