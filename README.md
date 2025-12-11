@@ -27,10 +27,15 @@
 
 ## Talent module
 
-* [ ] GET `/talent/profile`
-* [ ] PUT `/talent/profile`
-* [ ] POST `/talent/profile/avatar`
-* [ ] GET/PUT `/talent/resume`, POST `/talent/resume/upload`
+* [x] GET `/talent/profile`
+* [x] PUT `/talent/profile`
+* [x] POST `/talent/profile/avatar`
+* [x] GET `/talent/profile/avatar`
+* [x] DELETE `/talent/profile/avatar`
+* [x] GET `/talent/resume`
+* [x] PUT `/talent/resume`
+* [x] POST `/talent/resume`
+* [x] DELETE `/talent/resume`
 * [ ] GET `/talent/recommendations/jobs?limit=10`
 
 ---
