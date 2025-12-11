@@ -1,7 +1,6 @@
-import env from "../config/env.js";
+import { refreshCookie } from "../config/refreshCookie.js";
 import statusCodes from "../config/statusCodes.js";
 import { authService } from "../services/index.js";
-import { parseExpiry } from "../utils/general.utils.js";
 import { fail, success } from "../utils/response.utils.js";
 
 export async function register(req, res) {
@@ -67,12 +66,7 @@ export async function login(req, res) {
 	}
 
 	// Set refresh token cookie
-	res.cookie("jwt", result.payload.refreshToken, {
-		httpOnly: true,
-		maxAge: parseExpiry(env.JWT_REFRESH_EXPIRY),
-		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-	});
+	res.cookie("jwt", result.payload.refreshToken, refreshCookie);
 	return success({
 		res,
 		statusCode: statusCodes.OK,
@@ -97,12 +91,7 @@ export async function refresh(req, res) {
 	}
 
 	// Set refresh token cookie
-	res.cookie("jwt", result.payload.refreshToken, {
-		httpOnly: true,
-		maxAge: parseExpiry(env.JWT_REFRESH_EXPIRY),
-		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-	});
+	res.cookie("jwt", result.payload.refreshToken, refreshToken);
 	return success({
 		res,
 		statusCode: result.statusCode,
@@ -163,12 +152,7 @@ export async function resetPassword(req, res) {
 	}
 
 	// Clear refresh token cookie on password reset
-	res.clearCookie("jwt", {
-		httpOnly: true,
-		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-	});
-
+	res.clearCookie("jwt", refreshCookie);
 	return success({
 		res,
 		statusCode: result.statusCode,
@@ -182,11 +166,7 @@ export async function logout(req, res) {
 	const result = await authService.logout(refreshToken);
 
 	// Always clear the cookie, even if the token revocation failed
-	res.clearCookie("jwt", {
-		httpOnly: true,
-		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-	});
+	res.clearCookie("jwt", refreshToken);
 
 	if (!result.ok) {
 		return fail({
@@ -207,11 +187,7 @@ export async function logoutAllDevices(req, res) {
 	const result = await authService.logoutAllDevices(req.user.id);
 
 	// Clear the cookie for current device
-	res.clearCookie("jwt", {
-		httpOnly: true,
-		secure: env.NODE_ENV === "production",
-		sameSite: "none",
-	});
+	res.clearCookie("jwt", refreshCookie);
 
 	if (!result.ok) {
 		return fail({
